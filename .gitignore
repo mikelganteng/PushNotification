@@ -1,0 +1,12 @@
+node_modules/
+server/data/
+*.db
+.env
+.idea/
+*.iml
+local.properties
+.gradle/
+build/
+app/build/
+captures/
+.DS_Store
