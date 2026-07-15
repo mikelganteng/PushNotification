@@ -30,12 +30,30 @@ jobs:
       working-directory: ./android-app
       run: chmod +x gradlew
       
+    - name: Check Gradle version
+      working-directory: ./android-app
+      run: ./gradlew --version
+      
+    - name: Clean build directory
+      working-directory: ./android-app
+      run: ./gradlew clean
+      
     - name: Build Debug APK
       working-directory: ./android-app
-      run: ./gradlew assembleDebug --stacktrace
+      run: ./gradlew assembleDebug --stacktrace --info
       
     - name: Upload Debug APK
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
         path: android-app/app/build/outputs/apk/debug/app-debug.apk
+        
+    - name: Upload build logs
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          android-app/app/build/reports/
+          android-app/build/reports/
