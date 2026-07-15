@@ -9,6 +9,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.mutasi.pushnotif.MutasiApp
 import com.mutasi.pushnotif.data.CapturedNotification
+import com.mutasi.pushnotif.parser.TransactionParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -47,13 +48,22 @@ class NotificationCaptureService : NotificationListenerService() {
             pkg
         }
 
+        // Try to parse as transaction
+        val transactionInfo = TransactionParser.parseTransaction(pkg, title, body, bigText)
+
         val captured = CapturedNotification(
             packageName = pkg,
             appName = appName,
             title = title,
             body = body,
             bigText = bigText,
-            postedAt = sbn.postTime
+            postedAt = sbn.postTime,
+            bankName = transactionInfo?.bankName,
+            transactionType = transactionInfo?.transactionType,
+            amount = transactionInfo?.amount,
+            accountNumber = transactionInfo?.accountNumber,
+            senderName = transactionInfo?.senderName,
+            isQRIS = transactionInfo?.isQRIS ?: false
         )
 
         repo.saveNotification(captured)

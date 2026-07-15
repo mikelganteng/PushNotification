@@ -20,9 +20,30 @@ class NotificationAdapter(
 
     inner class VH(private val binding: ItemNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CapturedNotification) {
-            binding.tvTitle.text = item.title.ifEmpty { "(Tanpa judul)" }
+            // Show transaction info if available
+            if (item.amount != null && item.bankName != null) {
+                val amountFormatted = String.format(Locale("id"), "Rp %,.0f", item.amount)
+                val typeIcon = if (item.transactionType == "credit") "📥" else "📤"
+                val qrisTag = if (item.isQRIS) " [QRIS]" else ""
+                
+                binding.tvTitle.text = "$typeIcon ${item.bankName}$qrisTag - $amountFormatted"
+                
+                val details = buildString {
+                    if (item.senderName != null) {
+                        append("Dari: ${item.senderName}\n")
+                    }
+                    if (item.accountNumber != null) {
+                        append("Rek: ${item.accountNumber}\n")
+                    }
+                    append(item.bigText.ifEmpty { item.body })
+                }
+                binding.tvBody.text = details
+            } else {
+                binding.tvTitle.text = item.title.ifEmpty { "(Tanpa judul)" }
+                binding.tvBody.text = item.bigText.ifEmpty { item.body }
+            }
+            
             binding.tvApp.text = item.appName
-            binding.tvBody.text = item.bigText.ifEmpty { item.body }
             binding.tvTime.text = dateFmt.format(Date(item.postedAt))
 
             val (statusText, color) = when (item.status) {

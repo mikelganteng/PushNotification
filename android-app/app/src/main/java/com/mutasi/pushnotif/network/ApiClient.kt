@@ -33,6 +33,15 @@ class ApiClient(
             put("big_text", notif.bigText)
             put("posted_at", notif.postedAt)
             put("device_id", deviceId)
+            
+            // Transaction data
+            notif.bankName?.let { put("bank_name", it) }
+            notif.transactionType?.let { put("transaction_type", it) }
+            notif.amount?.let { put("amount", it) }
+            notif.accountNumber?.let { put("account_number", it) }
+            notif.senderName?.let { put("sender_name", it) }
+            put("is_qris", notif.isQRIS)
+            
             if (resend) {
                 put("resend", true)
                 put("original_id", notif.serverId ?: notif.id)

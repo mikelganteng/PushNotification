@@ -264,7 +264,21 @@ class MainActivity : AppCompatActivity() {
         binding.tvEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
 
         val pending = list.count { it.status == "pending" || it.status == "failed" }
-        binding.tvStats.text = "Total: ${list.size} | Pending/Gagal: $pending"
+        val transactions = list.count { it.amount != null }
+        val qrisCount = list.count { it.isQRIS }
+        
+        binding.tvStats.text = buildString {
+            append("Total: ${list.size}")
+            if (transactions > 0) {
+                append(" | Transaksi: $transactions")
+                if (qrisCount > 0) {
+                    append(" (QRIS: $qrisCount)")
+                }
+            }
+            if (pending > 0) {
+                append(" | Pending/Gagal: $pending")
+            }
+        }
     }
     
     private fun showAppSelector() {

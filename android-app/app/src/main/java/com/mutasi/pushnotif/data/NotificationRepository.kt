@@ -16,7 +16,14 @@ data class CapturedNotification(
     val postedAt: Long,
     var status: String = "pending",
     var serverId: String? = null,
-    var errorMessage: String? = null
+    var errorMessage: String? = null,
+    // Transaction fields
+    val bankName: String? = null,
+    val transactionType: String? = null,
+    val amount: Double? = null,
+    val accountNumber: String? = null,
+    val senderName: String? = null,
+    val isQRIS: Boolean = false
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("id", id)
@@ -29,6 +36,12 @@ data class CapturedNotification(
         put("status", status)
         put("server_id", serverId)
         put("error_message", errorMessage)
+        put("bank_name", bankName)
+        put("transaction_type", transactionType)
+        put("amount", amount)
+        put("account_number", accountNumber)
+        put("sender_name", senderName)
+        put("is_qris", isQRIS)
     }
 
     companion object {
@@ -42,7 +55,13 @@ data class CapturedNotification(
             postedAt = obj.optLong("posted_at"),
             status = obj.optString("status", "pending"),
             serverId = obj.optString("server_id").ifEmpty { null },
-            errorMessage = obj.optString("error_message").ifEmpty { null }
+            errorMessage = obj.optString("error_message").ifEmpty { null },
+            bankName = obj.optString("bank_name").ifEmpty { null },
+            transactionType = obj.optString("transaction_type").ifEmpty { null },
+            amount = if (obj.has("amount")) obj.optDouble("amount") else null,
+            accountNumber = obj.optString("account_number").ifEmpty { null },
+            senderName = obj.optString("sender_name").ifEmpty { null },
+            isQRIS = obj.optBoolean("is_qris", false)
         )
     }
 }
