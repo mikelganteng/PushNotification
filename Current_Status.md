@@ -4,6 +4,35 @@
 
 ### Recent Changes
 
+#### Banking Transaction Parser (2026-07-16) ⭐ NEW
+**Feature**: Automatic parsing of banking transaction notifications
+
+**Implementation**:
+- Created `TransactionParser` class for intelligent parsing
+- Supports multiple banks: BCA, Mandiri, BRI, BNI, Jago, Seabank, DANA, OVO, GoPay
+- Automatic QRIS transaction detection
+- Parse transaction details:
+  - Amount (Rp format)
+  - Account number
+  - Sender name
+  - Transaction type (credit/debit)
+- Enhanced dashboard with transaction statistics
+- Visual indicators (📥 credit, 📤 debit, [QRIS] tag)
+- Server `/api/stats` endpoint for analytics
+
+**Files Created**:
+- `android-app/app/src/main/java/com/mutasi/pushnotif/parser/TransactionParser.kt`
+
+**Files Modified**:
+- `NotificationRepository.kt` - Added transaction fields to data model
+- `NotificationCaptureService.kt` - Integrated transaction parsing
+- `NotificationAdapter.kt` - Enhanced UI for transactions
+- `MainActivity.kt` - Added transaction statistics
+- `ApiClient.kt` - Send transaction data to server
+- `server.js` - Store and analyze transaction data
+
+**Similar to**: [Notification Listener (W38S)](https://play.google.com/store/apps/details?id=com.notiflistener.app)
+
 #### Build System Setup (2026-07-16)
 **Implementation**: GitHub Actions automatic APK build
 
@@ -56,27 +85,58 @@
 
 ### Current Features
 
-1. **Server Configuration**
+1. **Banking Transaction Parsing** ⭐ NEW
+   - Automatic detection of banking transaction notifications
+   - Parse amount, account number, sender name
+   - Support 9+ banking apps and e-wallets
+   - QRIS transaction detection
+   - Credit/Debit type classification
+
+2. **Server Configuration**
    - Dropdown with predefined server options
    - Custom URL option
    - Server health check with status display
    - API key configuration
 
-2. **App Filtering**
+3. **App Filtering**
    - Manual filter input (comma-separated package names)
    - Visual app selector with all installed apps
    - Multi-select capability
 
-3. **Notification Management**
-   - View captured notifications
+4. **Transaction Dashboard** ⭐ ENHANCED
+   - View captured notifications with parsed transaction info
+   - Transaction statistics (total, QRIS count, etc.)
+   - Visual indicators for transaction type
+   - Formatted currency display
    - Retry failed notifications
    - Retry all pending/failed notifications
    - Status tracking (pending/sent/failed)
 
-4. **Service Control**
+5. **Service Control**
    - Enable/disable notification forwarding
    - Notification access permission check
    - Automatic service restart
+   - Background service with foreground notification
+
+6. **Server API**
+   - `/api/notifications` - Receive notifications with transaction data
+   - `/api/stats` - Get transaction analytics and statistics
+   - `/api/health` - Health check endpoint
+   - Support for batch operations
+
+### Supported Banks & E-Wallets
+
+✅ BCA (Bank Central Asia)
+✅ Mandiri
+✅ BRI (Bank Rakyat Indonesia)  
+✅ BNI (Bank Negara Indonesia)
+✅ Jago
+✅ Seabank
+✅ DANA
+✅ OVO
+✅ GoPay
+
+*Extensible to support more banks through pattern matching*
 
 ### Technical Implementation
 
