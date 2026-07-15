@@ -1,8 +1,22 @@
 # Current Status - Mutasi Push Notification
 
-## Last Update: 2026-07-13
+## Last Update: 2026-07-16
 
 ### Recent Changes
+
+#### Build System Setup (2026-07-16)
+**Implementation**: GitHub Actions automatic APK build
+
+**Details**:
+- Added GitHub Actions workflow for automatic APK builds
+- Configured debug signing for release builds
+- Added Gradle caching for faster builds
+- Build triggered on every push to `android-app/**` folder
+- APK artifacts automatically uploaded and downloadable
+
+**Workflow Location**: `.github/workflows/build-android.yml`
+
+**Build Status**: Check at https://github.com/mikelganteng/PushNotification/actions
 
 #### 1. Fixed Force Close Issue When Changing Server URL
 **Problem**: App crashed when switching between server URLs
@@ -96,7 +110,17 @@ None currently
 
 ### Next Steps
 
-1. Test on physical Android device
-2. Test network connectivity edge cases
-3. Consider adding app icons to selection dialog
-4. Consider adding search functionality for app selector
+1. Wait for GitHub Actions build to complete (5-10 minutes)
+2. Download APK from Actions artifacts
+3. Test on physical Android device
+4. Test network connectivity edge cases
+5. Consider adding app icons to selection dialog
+6. Consider adding search functionality for app selector
+
+### How to Download APK
+
+1. Go to https://github.com/mikelganteng/PushNotification/actions
+2. Click on the latest successful workflow run (green checkmark)
+3. Scroll down to "Artifacts" section
+4. Download `app-debug` (contains app-debug.apk)
+5. Extract and install on Android device
